@@ -1,7 +1,7 @@
 #include "driver/gpio.h"
 #include "driver/mcpwm.h"
 #include "driver/spi_master.h"
-#include "drv8305.h"
+#include "drv8323r.h"
 #include "esp_err.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -21,8 +21,8 @@
 #define MOSI_PIN 13
 #define SCLK_PIN 14
 #define CS_PIN 15
-#define DRV8305_EN 2
-#define DRV8305_NFAULT 4
+#define DRV8323R_EN 2
+#define DRV8323R_NFAULT 4
 
 static const char TAG[] = "bldc mcpwm";
 
@@ -33,8 +33,8 @@ void init_gpio() {
   mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM1A, PWM_H_B);
   mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM2A, PWM_H_C);
 
-  drv8305_t dev = {.DRV_EN_GATE_pin = DRV8305_EN,
-                   .DRV_N_FAULT_pin = DRV8305_NFAULT,
+  drv8323r_t dev = {.DRV_EN_GATE_pin = DRV8323R_EN,
+                   .DRV_N_FAULT_pin = DRV8323R_NFAULT,
                    .DRV_MISO_SDO_pin = MISO_PIN,
                    .DRV_MOSI_SDI_pin = MOSI_PIN,
                    .DRV_SCLK_pin = SCLK_PIN,
@@ -43,15 +43,15 @@ void init_gpio() {
                    .max_spi_clockspeed = 1000000};
 
   // Initialize DRV8305
-  ESP_ERROR_CHECK(drv8305_init(&dev));
+  ESP_ERROR_CHECK(drv8323r_init(&dev));
 
-  drv8305_control_07_reg_t pwm_mode_config;
-  drv8305_read_control_07_register(&dev, &pwm_mode_config);
+  drv8323r_control_02_reg_t pwm_mode_config;
+  drv8323r_read_control_02_register(&dev, &pwm_mode_config);
   ESP_LOGI(TAG, "INITIAL VALUE %x", pwm_mode_config.PWM_MODE);
   pwm_mode_config.PWM_MODE = 0b01;
-  ESP_ERROR_CHECK(drv8305_write_control_07_register(&dev, pwm_mode_config));
+  ESP_ERROR_CHECK(drv8323r_write_control_02_register(&dev, pwm_mode_config));
 
-  drv8305_read_control_07_register(&dev, &pwm_mode_config);
+  drv8323r_read_control_02_register(&dev, &pwm_mode_config);
   ESP_LOGI(TAG, "FINAL VALUE %x", pwm_mode_config.PWM_MODE);
 }
 
@@ -78,9 +78,12 @@ void mcpwm_config() {
   mcpwm_start(MCPWM_UNIT_0, MCPWM_TIMER_1);
   mcpwm_start(MCPWM_UNIT_0, MCPWM_TIMER_2);
 
-  mcpwm_sync_enable(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_SELECT_SYNC0, 0);
-  mcpwm_sync_enable(MCPWM_UNIT_0, MCPWM_TIMER_1, MCPWM_SELECT_SYNC0, 0);
-  mcpwm_sync_enable(MCPWM_UNIT_0, MCPWM_TIMER_2, MCPWM_SELECT_SYNC0, 0);
+  mcpwm_sync_config_t sync_config;
+  sync_config.sync_sig = MCPWM_SELECT_GPIO_SYNC0;
+
+  mcpwm_sync_configure(MCPWM_UNIT_0, MCPWM_TIMER_0, &sync_config);
+  mcpwm_sync_configure(MCPWM_UNIT_0, MCPWM_TIMER_1, &sync_config);
+  mcpwm_sync_configure(MCPWM_UNIT_0, MCPWM_TIMER_2, &sync_config);
 }
 
 void app_main() {

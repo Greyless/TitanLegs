@@ -138,12 +138,10 @@ esp_err_t drv8323r_read_control_03_register(drv8323r_t *dev, drv8323r_control_03
 esp_err_t drv8323r_read_control_04_register(drv8323r_t *dev, drv8323r_control_04_reg_t *value);
 esp_err_t drv8323r_read_control_05_register(drv8323r_t *dev, drv8323r_control_05_reg_t *value);
 esp_err_t drv8323r_read_control_06_register(drv8323r_t *dev, drv8323r_control_06_reg_t *value);
-esp_err_t drv8323r_read_control_07_register(drv8323r_t *dev, drv8323r_control_07_reg_t *value);
 
 esp_err_t drv8323r_write_control_02_register(drv8323r_t *dev, drv8323r_control_02_reg_t value);
 esp_err_t drv8323r_write_control_03_register(drv8323r_t *dev, drv8323r_control_03_reg_t value);
 esp_err_t drv8323r_write_control_04_register(drv8323r_t *dev, drv8323r_control_04_reg_t value);
 esp_err_t drv8323r_write_control_05_register(drv8323r_t *dev, drv8323r_control_05_reg_t value);
 esp_err_t drv8323r_write_control_06_register(drv8323r_t *dev, drv8323r_control_06_reg_t value);
-esp_err_t drv8323r_write_control_07_register(drv8323r_t *dev, drv8323r_control_07_reg_t value);
 #endif

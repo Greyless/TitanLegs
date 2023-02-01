@@ -137,10 +137,6 @@ esp_err_t drv8323r_read_control_06_register(drv8323r_t *dev, drv8323r_control_06
     return drv8323r_read_register(dev, DRV8323R_CONTROL_06_REG_ADDR, (uint16_t*)value);
 }
 
-esp_err_t drv8323r_read_control_07_register(drv8323r_t *dev, drv8323r_control_07_reg_t *value)
-{
-    return drv8323r_read_register(dev, DRV8323R_CONTROL_07_REG_ADDR, (uint16_t*)value);
-}
 
 esp_err_t drv8323r_write_control_02_register(drv8323r_t *dev, drv8323r_control_02_reg_t value)
 {
@@ -165,9 +161,4 @@ esp_err_t drv8323r_write_control_05_register(drv8323r_t *dev, drv8323r_control_0
 esp_err_t drv8323r_write_control_06_register(drv8323r_t *dev, drv8323r_control_06_reg_t value)
 {
     return drv8323r_write_register(dev, DRV8323R_CONTROL_06_REG_ADDR, *((uint16_t*)&value));
-}
-
-esp_err_t drv8323r_write_control_07_register(drv8323r_t *dev, drv8323r_control_07_reg_t value)
-{
-    return drv8323r_write_register(dev, DRV8323R_CONTROL_07_REG_ADDR, *((uint16_t*)&value));
 }
