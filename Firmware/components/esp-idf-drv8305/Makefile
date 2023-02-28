@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := esp-idf-drv8323r
+PROJECT_NAME := esp-idf-drv8305
 
 include $(IDF_PATH)/make/project.mk
 
